@@ -1,12 +1,16 @@
-use crate::{damage_types::DamageType, dice::Dice, player::Player};
+use crate::{
+    currency::{cp, Currency},
+    damage_types::DamageType,
+    dice::{DamageAmount, Dice},
+    player::Player,
+};
 
 #[derive(Debug)]
 #[allow(dead_code)]
 pub struct Weapon {
     name: String,
-    price: u32, // in copper pieces
-    dice: Dice,
-    damage_type: Vec<DamageType>,
+    price: Currency,
+    damage: DamageAmount,
     weapon_type: WeaponType,
     weapon_group: WeaponGroup,
     traits: Vec<WeaponTrait>,
@@ -18,9 +22,12 @@ impl Weapon {
     pub fn new(name: &str) -> WeaponBuilder {
         WeaponBuilder {
             name: name.to_string(),
-            price: 0,
-            dice: Dice::D8,
-            damage_type: Vec::new(),
+            price: cp(1),
+            damage: DamageAmount {
+                n: 1,
+                d: Dice::D4,
+                t: DamageType::Slashing,
+            },
             weapon_type: WeaponType::Simple,
             weapon_group: WeaponGroup::Sword,
             traits: Vec::new(),
@@ -32,9 +39,8 @@ impl Weapon {
 
 pub struct WeaponBuilder {
     name: String,
-    price: u32,
-    dice: Dice,
-    damage_type: Vec<DamageType>,
+    price: Currency,
+    damage: DamageAmount,
     weapon_type: WeaponType,
     weapon_group: WeaponGroup,
     traits: Vec<WeaponTrait>,
@@ -43,18 +49,13 @@ pub struct WeaponBuilder {
 }
 
 impl WeaponBuilder {
-    pub fn price(mut self, price: u32) -> Self {
+    pub fn price(mut self, price: Currency) -> Self {
         self.price = price;
         self
     }
 
-    pub fn dice(mut self, dice: Dice) -> Self {
-        self.dice = dice;
-        self
-    }
-
-    pub fn damage_type(mut self, damage_type: Vec<DamageType>) -> Self {
-        self.damage_type = damage_type;
+    pub fn damage(mut self, damage_amount: DamageAmount) -> Self {
+        self.damage = damage_amount;
         self
     }
 
@@ -87,8 +88,7 @@ impl WeaponBuilder {
         Weapon {
             name: self.name,
             price: self.price,
-            dice: self.dice,
-            damage_type: self.damage_type,
+            damage: self.damage,
             weapon_type: self.weapon_type,
             weapon_group: self.weapon_group,
             traits: self.traits,
@@ -120,13 +120,18 @@ pub enum WeaponTrait {
 
 #[cfg(test)]
 mod tests {
+    use crate::currency::sp;
+
     use super::*;
 
     fn construct_weapon() -> Weapon {
         Weapon::new("Dagger")
-            .price(20)
-            .dice(Dice::D4)
-            .damage_type(vec![DamageType::Piercing])
+            .price(sp(20))
+            .damage(DamageAmount {
+                n: 1,
+                d: Dice::D4,
+                t: DamageType::Slashing,
+            })
             .weapon_type(WeaponType::Simple)
             .weapon_group(WeaponGroup::Knife)
             .traits(vec![
@@ -142,7 +147,7 @@ mod tests {
         let w = construct_weapon();
 
         for _ in 0..100 {
-            let damage = w.dice.sum(1);
+            let damage = w.damage.sum();
             assert!(damage >= 1 && damage <= 4)
         }
     }

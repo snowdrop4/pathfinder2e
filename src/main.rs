@@ -2,6 +2,7 @@ pub mod ancestry;
 pub mod attribute;
 pub mod attributes;
 pub mod class;
+pub mod currency;
 pub mod damage_types;
 pub mod dice;
 pub mod equipment;
