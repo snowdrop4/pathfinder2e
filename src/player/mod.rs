@@ -65,9 +65,7 @@ impl PlayerBuilder {
         let class = self.class.ok_or("Class is required")?;
         let attributes = self.attributes.unwrap_or_else(Attributes::new);
         let skills = self.skills.unwrap_or_else(Skills::new);
-        let equipment = self
-            .equipment
-            .unwrap_or_else(|| Equipment { hands: Vec::new() });
+        let equipment = self.equipment.unwrap_or_else(|| Equipment::new().build());
 
         let mut player = Player {
             level: self.level,
@@ -118,6 +116,8 @@ impl Player {
 
 #[cfg(test)]
 mod tests {
+    use crate::items::weapons;
+
     use super::*;
 
     fn construct_player() -> Player {
@@ -127,6 +127,7 @@ mod tests {
                 Attribute::Constitution,
             )))
             .class(Class::new_fighter())
+            .equipment(Equipment::new().hands(vec![weapons::dagger()]).build())
             .build()
             .unwrap()
     }

@@ -1,3 +1,6 @@
+pub mod definitions;
+pub use definitions::*;
+
 use crate::{
     currency::{cp, Currency},
     damage_types::DamageType,
@@ -120,31 +123,31 @@ pub enum WeaponTrait {
 
 #[cfg(test)]
 mod tests {
-    use crate::currency::sp;
-
     use super::*;
 
-    fn construct_weapon() -> Weapon {
-        Weapon::new("Dagger")
-            .price(sp(20))
-            .damage(DamageAmount {
-                n: 1,
-                d: Dice::D4,
-                t: DamageType::Slashing,
-            })
-            .weapon_type(WeaponType::Simple)
-            .weapon_group(WeaponGroup::Knife)
-            .traits(vec![
-                WeaponTrait::Agile,
-                WeaponTrait::Finesse,
-                WeaponTrait::Versatile(DamageType::Slashing),
-            ])
-            .build()
+    #[test]
+    fn test_dagger() {
+        let w = dagger();
+
+        for _ in 0..100 {
+            let damage = w.damage.sum();
+            assert!(damage >= 1 && damage <= 4)
+        }
     }
 
     #[test]
-    fn test_damage() {
-        let w = construct_weapon();
+    fn test_shortsword() {
+        let w = shortsword();
+
+        for _ in 0..100 {
+            let damage = w.damage.sum();
+            assert!(damage >= 1 && damage <= 4)
+        }
+    }
+
+    #[test]
+    fn test_longsword() {
+        let w = longsword();
 
         for _ in 0..100 {
             let damage = w.damage.sum();

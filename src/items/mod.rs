@@ -1,2 +1,1 @@
-pub mod weapon;
-pub mod definitions;
+pub mod weapons;
