@@ -1,6 +1,6 @@
 use crate::{
-    ancestry::Ancestry, attribute::Attribute, attributes::Attributes, class::Class,
-    equipment::Equipment, skills::Skills,
+    ancestry::Ancestry, attribute::Attribute, attributes::Attributes, class::Class, dice::Dice,
+    equipment::Equipment, items::weapons::Weapon, skills::Skills,
 };
 
 #[derive(Debug)]
@@ -111,6 +111,39 @@ impl Player {
             ],
             &[],
         )
+    }
+
+    fn get_active_weapon(&self) -> &Weapon {
+        // TODO: Better logic here, if there are multiple weapons.
+        if self.equipment.hands.len() == 0 {
+            return &self.equipment.unarmed[0];
+        } else {
+            return &self.equipment.hands[0];
+        }
+    }
+
+    pub fn weapon_attack(&self, attack_index: i64) -> i64 {
+        let roll = Dice::D20.sum(1);
+
+        let weapon = self.get_active_weapon();
+
+        // TODO: weapon_attack_mod
+        let attribute_attack_mod = weapon.get_attribute_attack_mod(&self.get_final_attributes());
+
+        let map = weapon.get_multiple_attack_penalty(attack_index);
+
+        roll + attribute_attack_mod + map
+    }
+
+    pub fn weapon_damage(&self) -> i64 {
+        let roll = Dice::D20.sum(1);
+
+        let weapon = self.get_active_weapon();
+
+        // TODO: weapon_damage_mod
+        let attribute_damage_mod = weapon.get_attribute_damage_mod(&self.get_final_attributes());
+
+        return roll + attribute_damage_mod;
     }
 }
 

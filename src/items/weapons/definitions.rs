@@ -1,24 +1,36 @@
 use crate::{
-    currency::{gp, sp},
+    currency::{cp, gp, sp},
     damage_types::DamageType,
-    dice::{DamageAmount, Dice},
+    dice::{Dice, DiceAmount},
     items::weapons::{Weapon, WeaponGroup, WeaponTrait, WeaponType},
 };
+
+pub fn fists() -> Weapon {
+    Weapon::new("Unarmed Attack")
+        .price(cp(0))
+        .dice(DiceAmount { n: 1, d: Dice::D4 })
+        .damage_type(DamageType::Bludgeoning)
+        .weapon_type(WeaponType::Unarmed)
+        .weapon_group(WeaponGroup::Unarmed)
+        .traits(vec![
+            WeaponTrait::Agile,
+            WeaponTrait::Finesse,
+            WeaponTrait::Nonlethal,
+        ])
+        .build()
+}
 
 pub fn dagger() -> Weapon {
     Weapon::new("Dagger")
         .price(sp(2))
-        .damage(DamageAmount {
-            n: 1,
-            d: Dice::D4,
-            t: DamageType::Piercing,
-        })
+        .dice(DiceAmount { n: 1, d: Dice::D4 })
+        .damage_type(DamageType::Piercing)
         .weapon_type(WeaponType::Simple)
         .weapon_group(WeaponGroup::Knife)
         .traits(vec![
             WeaponTrait::Agile,
             WeaponTrait::Finesse,
-            WeaponTrait::Versatile(DamageType::Slashing),
+            WeaponTrait::VersatileSlashing,
         ])
         .build()
 }
@@ -26,17 +38,14 @@ pub fn dagger() -> Weapon {
 pub fn shortsword() -> Weapon {
     Weapon::new("Shortsword")
         .price(sp(9))
-        .damage(DamageAmount {
-            n: 1,
-            d: Dice::D6,
-            t: DamageType::Piercing,
-        })
+        .dice(DiceAmount { n: 1, d: Dice::D6 })
+        .damage_type(DamageType::Piercing)
         .weapon_type(WeaponType::Martial)
         .weapon_group(WeaponGroup::Sword)
         .traits(vec![
             WeaponTrait::Agile,
             WeaponTrait::Finesse,
-            WeaponTrait::Versatile(DamageType::Slashing),
+            WeaponTrait::VersatileSlashing,
         ])
         .build()
 }
@@ -44,13 +53,10 @@ pub fn shortsword() -> Weapon {
 pub fn longsword() -> Weapon {
     Weapon::new("Longsword")
         .price(gp(1))
-        .damage(DamageAmount {
-            n: 1,
-            d: Dice::D8,
-            t: DamageType::Slashing,
-        })
+        .dice(DiceAmount { n: 1, d: Dice::D8 })
+        .damage_type(DamageType::Slashing)
         .weapon_type(WeaponType::Martial)
         .weapon_group(WeaponGroup::Sword)
-        .traits(vec![WeaponTrait::Versatile(DamageType::Piercing)])
+        .traits(vec![WeaponTrait::VersatilePiercing])
         .build()
 }

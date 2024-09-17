@@ -2,23 +2,26 @@ pub mod definitions;
 pub use definitions::*;
 
 use crate::{
+    attribute::Attribute,
+    attributes::Attributes,
     currency::{cp, Currency},
     damage_types::DamageType,
-    dice::{DamageAmount, Dice},
+    dice::{Dice, DiceAmount},
     player::Player,
 };
 
 #[derive(Debug)]
 #[allow(dead_code)]
 pub struct Weapon {
-    name: String,
-    price: Currency,
-    damage: DamageAmount,
-    weapon_type: WeaponType,
-    weapon_group: WeaponGroup,
-    traits: Vec<WeaponTrait>,
-    hands: u8,
-    on_hit_effect: Option<fn(&Weapon, &mut Player)>,
+    pub name: String,
+    pub price: Currency,
+    pub dice: DiceAmount,
+    pub damage_type: DamageType,
+    pub weapon_type: WeaponType,
+    pub weapon_group: WeaponGroup,
+    pub traits: Vec<WeaponTrait>,
+    pub hands: u8,
+    pub on_hit_effect: Option<fn(&Weapon, &mut Player)>,
 }
 
 impl Weapon {
@@ -26,11 +29,8 @@ impl Weapon {
         WeaponBuilder {
             name: name.to_string(),
             price: cp(1),
-            damage: DamageAmount {
-                n: 1,
-                d: Dice::D4,
-                t: DamageType::Slashing,
-            },
+            dice: DiceAmount { n: 1, d: Dice::D4 },
+            damage_type: DamageType::Slashing,
             weapon_type: WeaponType::Simple,
             weapon_group: WeaponGroup::Sword,
             traits: Vec::new(),
@@ -38,12 +38,54 @@ impl Weapon {
             on_hit_effect: None,
         }
     }
+
+    pub fn get_multiple_attack_penalty(&self, attack_index: i64) -> i64 {
+        if self.traits.contains(&WeaponTrait::Agile) {
+            return attack_index * -4;
+        } else {
+            return attack_index * -5;
+        }
+    }
+
+    pub fn get_attribute_damage_mod(&self, attributes: &Attributes) -> i64 {
+        attributes.get(Attribute::Strength) as i64
+    }
+
+    pub fn get_attribute_attack_mod(&self, attributes: &Attributes) -> i64 {
+        if self.traits.contains(&WeaponTrait::Finesse) {
+            let dex = attributes.get(Attribute::Dexterity);
+            let str = attributes.get(Attribute::Strength);
+
+            return std::cmp::max(dex, str) as i64;
+        } else {
+            return attributes.get(Attribute::Strength) as i64;
+        }
+    }
+
+    pub fn get_damage_types(&self) -> Vec<DamageType> {
+        let mut v = vec![self.damage_type];
+
+        if self.traits.contains(&WeaponTrait::VersatilePiercing) {
+            v.push(DamageType::Piercing);
+        }
+
+        if self.traits.contains(&WeaponTrait::VersatileSlashing) {
+            v.push(DamageType::Slashing);
+        }
+
+        if self.traits.contains(&WeaponTrait::VersatileBludgeoning) {
+            v.push(DamageType::Bludgeoning);
+        }
+
+        v
+    }
 }
 
 pub struct WeaponBuilder {
     name: String,
     price: Currency,
-    damage: DamageAmount,
+    dice: DiceAmount,
+    damage_type: DamageType,
     weapon_type: WeaponType,
     weapon_group: WeaponGroup,
     traits: Vec<WeaponTrait>,
@@ -57,8 +99,13 @@ impl WeaponBuilder {
         self
     }
 
-    pub fn damage(mut self, damage_amount: DamageAmount) -> Self {
-        self.damage = damage_amount;
+    pub fn dice(mut self, dice: DiceAmount) -> Self {
+        self.dice = dice;
+        self
+    }
+
+    pub fn damage_type(mut self, damage_type: DamageType) -> Self {
+        self.damage_type = damage_type;
         self
     }
 
@@ -91,7 +138,8 @@ impl WeaponBuilder {
         Weapon {
             name: self.name,
             price: self.price,
-            damage: self.damage,
+            dice: self.dice,
+            damage_type: self.damage_type,
             weapon_type: self.weapon_type,
             weapon_group: self.weapon_group,
             traits: self.traits,
@@ -101,24 +149,38 @@ impl WeaponBuilder {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum WeaponType {
+    Unarmed,
     Simple,
     Martial,
     Advanced,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum WeaponGroup {
+    Unarmed,
     Sword,
     Knife,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum WeaponTrait {
+    /// The multiple attack penalty you take with this weapon on the second
+    /// attack on your turn is –4 instead of –5, and –8 instead of –10 on the
+    /// third and subsequent attacks in the turn.
     Agile,
+
+    /// You can use your Dexterity modifier instead of your Strength modifier
+    /// on attack rolls using this melee weapon. You still calculate damage
+    /// using Strength.
     Finesse,
-    Versatile(DamageType),
+
+    VersatilePiercing,
+    VersatileSlashing,
+    VersatileBludgeoning,
+
+    Nonlethal,
 }
 
 #[cfg(test)]
@@ -130,7 +192,7 @@ mod tests {
         let w = dagger();
 
         for _ in 0..100 {
-            let damage = w.damage.sum();
+            let damage = w.dice.sum();
             assert!(damage >= 1 && damage <= 4)
         }
     }
@@ -140,7 +202,7 @@ mod tests {
         let w = shortsword();
 
         for _ in 0..100 {
-            let damage = w.damage.sum();
+            let damage = w.dice.sum();
             assert!(damage >= 1 && damage <= 4)
         }
     }
@@ -150,7 +212,7 @@ mod tests {
         let w = longsword();
 
         for _ in 0..100 {
-            let damage = w.damage.sum();
+            let damage = w.dice.sum();
             assert!(damage >= 1 && damage <= 4)
         }
     }
