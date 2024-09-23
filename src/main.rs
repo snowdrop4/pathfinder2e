@@ -29,7 +29,11 @@ fn test_combat() {
             Attribute::Constitution,
         )))
         .class(Class::new_fighter())
-        .equipment(Equipment::new().hands(vec![weapons::dagger()]).build())
+        .equipment(
+            Equipment::new()
+                .equipped_weapons(vec![weapons::dagger()])
+                .build(),
+        )
         .build()
         .unwrap();
 
@@ -39,7 +43,11 @@ fn test_combat() {
             Attribute::Constitution,
         )))
         .class(Class::new_fighter())
-        .equipment(Equipment::new().hands(vec![weapons::dagger()]).build())
+        .equipment(
+            Equipment::new()
+                .equipped_weapons(vec![weapons::dagger()])
+                .build(),
+        )
         .build()
         .unwrap();
 }

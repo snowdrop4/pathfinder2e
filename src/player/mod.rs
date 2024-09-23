@@ -115,10 +115,10 @@ impl Player {
 
     fn get_active_weapon(&self) -> &Weapon {
         // TODO: Better logic here, if there are multiple weapons.
-        if self.equipment.hands.len() == 0 {
-            return &self.equipment.unarmed[0];
+        if self.equipment.equipped_weapons.len() == 0 {
+            return &self.equipment.natural_weapons[0];
         } else {
-            return &self.equipment.hands[0];
+            return &self.equipment.equipped_weapons[0];
         }
     }
 
@@ -160,7 +160,11 @@ mod tests {
                 Attribute::Constitution,
             )))
             .class(Class::new_fighter())
-            .equipment(Equipment::new().hands(vec![weapons::dagger()]).build())
+            .equipment(
+                Equipment::new()
+                    .equipped_weapons(vec![weapons::dagger()])
+                    .build(),
+            )
             .build()
             .unwrap()
     }
