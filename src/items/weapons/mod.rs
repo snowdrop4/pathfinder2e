@@ -48,7 +48,7 @@ impl Weapon {
     }
 
     pub fn get_attribute_damage_mod(&self, attributes: &Attributes) -> i64 {
-        attributes.get(Attribute::Strength) as i64
+        attributes.get(Attribute::Strength)
     }
 
     pub fn get_attribute_attack_mod(&self, attributes: &Attributes) -> i64 {
@@ -56,9 +56,9 @@ impl Weapon {
             let dex = attributes.get(Attribute::Dexterity);
             let str = attributes.get(Attribute::Strength);
 
-            return std::cmp::max(dex, str) as i64;
+            return std::cmp::max(dex, str);
         } else {
-            return attributes.get(Attribute::Strength) as i64;
+            return attributes.get(Attribute::Strength);
         }
     }
 

@@ -1,12 +1,20 @@
+use core::panic;
+
 use crate::{
-    ancestry::Ancestry, attribute::Attribute, attributes::Attributes, class::Class, dice::Dice,
-    equipment::Equipment, items::weapons::Weapon, skills::Skills,
+    ancestry::Ancestry,
+    attribute::Attribute,
+    attributes::Attributes,
+    class::Class,
+    dice::Dice,
+    equipment::Equipment,
+    items::{armors::Armor, weapons::Weapon},
+    skills::Skills,
 };
 
 #[derive(Debug)]
 #[allow(dead_code)]
 pub struct Player {
-    level: i8,
+    level: i64,
 
     ancestry: Ancestry,
     class: Class,
@@ -19,7 +27,7 @@ pub struct Player {
 }
 
 pub struct PlayerBuilder {
-    level: i8,
+    level: i64,
 
     ancestry: Option<Ancestry>,
     class: Option<Class>,
@@ -96,9 +104,8 @@ impl Player {
     }
 
     pub fn get_max_hp(&self) -> i64 {
-        let class_based =
-            self.class.hp + self.get_final_attributes().get(Attribute::Constitution) as i64;
-        let level_based = class_based * self.level as i64;
+        let class_based = self.class.hp + self.get_final_attributes().get(Attribute::Constitution);
+        let level_based = class_based * self.level;
 
         self.ancestry.hp + level_based
     }
@@ -113,13 +120,37 @@ impl Player {
         )
     }
 
+    fn get_speed(&self) -> i64 {
+        if self.armor_requirements_met() {
+            return self.ancestry.speed;
+        } else {
+            return self.ancestry.speed - self.get_active_armor().speed_penalty;
+        }
+    }
+
     fn get_active_weapon(&self) -> &Weapon {
         // TODO: Better logic here, if there are multiple weapons.
-        if self.equipment.equipped_weapons.len() == 0 {
-            return &self.equipment.natural_weapons[0];
-        } else {
+        if self.equipment.equipped_weapons.len() != 0 {
             return &self.equipment.equipped_weapons[0];
         }
+
+        if self.equipment.natural_weapons.len() != 0 {
+            return &self.equipment.natural_weapons[0];
+        }
+
+        panic!("no equipped weapons")
+    }
+
+    fn get_active_armor(&self) -> &Armor {
+        if let Some(ref armor) = self.equipment.equipped_armor {
+            return armor;
+        }
+
+        if let Some(ref armor) = self.equipment.natural_armor {
+            return &armor;
+        }
+
+        panic!("no equipped armor")
     }
 
     pub fn weapon_attack(&self, attack_index: i64) -> i64 {
@@ -144,6 +175,13 @@ impl Player {
         let attribute_damage_mod = weapon.get_attribute_damage_mod(&self.get_final_attributes());
 
         return roll + attribute_damage_mod;
+    }
+
+    fn armor_requirements_met(&self) -> bool {
+        let armor = self.get_active_armor();
+
+        return armor.strength_required.unwrap_or(i64::MIN)
+            > self.get_final_attributes().get(Attribute::Strength);
     }
 }
 

@@ -1,9 +1,8 @@
 use crate::attribute::Attribute;
 
-
 #[derive(Debug, Clone, Copy)]
 pub struct Attributes {
-    values: [i8; 6],
+    values: [i64; 6],
 }
 
 impl Attributes {
@@ -23,7 +22,7 @@ impl Attributes {
         attributes
     }
 
-    pub fn get(&self, attr: Attribute) -> i8 {
+    pub fn get(&self, attr: Attribute) -> i64 {
         self.values[attr as usize]
     }
 }
