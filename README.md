@@ -3,7 +3,9 @@
 - [x] Ancestry:
     - [x] HP
     - [x] Size
-    - [x] Movement Speed
+    - [x] Stride Speed
+    - [ ] Swim Speed
+    - [ ] Fly Speed
     - [x] Attribute Boosts
 - [ ] Ancestries:
     - [x] Human
@@ -15,7 +17,9 @@
     - [x] Attributes
     - [x] Skills
     - [ ] AC
-    - [x] Movement Speed
+    - [x] Stride Speed
+    - [ ] Swim Speed
+    - [ ] Fly Speed
     - [ ] Saving Throws
     - [ ] Languages
     - [ ] Bulk

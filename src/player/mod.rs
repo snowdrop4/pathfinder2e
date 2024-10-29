@@ -124,11 +124,11 @@ impl Player {
     /// While wearing a suit of armor, you take the penalty listed in this
     /// entry to your Speed, as well as to any other movement types you have,
     /// such as a climb Speed or swim Speed, to a minimum Speed of 5 feet.
-    fn get_speed(&self) -> i64 {
+    fn get_stride_speed(&self) -> i64 {
         let speed = if self.armor_requirements_met() {
-            self.ancestry.speed
+            self.ancestry.stride_speed
         } else {
-            self.ancestry.speed - self.get_active_armor().speed_penalty
+            self.ancestry.stride_speed - self.get_active_armor().speed_penalty
         };
 
         min(5, speed)

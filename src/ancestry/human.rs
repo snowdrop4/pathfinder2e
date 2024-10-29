@@ -7,7 +7,7 @@ impl Ancestry {
         return Ancestry {
             hp: 8,
             size: Size::Medium,
-            speed: 25,
+            stride_speed: 25,
             attribute_boosts,
         };
     }
