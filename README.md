@@ -4,6 +4,7 @@
     - [x] HP
     - [x] Size
     - [x] Stride Speed
+    - [ ] Climb Speed
     - [ ] Swim Speed
     - [ ] Fly Speed
     - [x] Attribute Boosts
@@ -18,6 +19,7 @@
     - [x] Skills
     - [ ] AC
     - [x] Stride Speed
+    - [ ] Climb Speed
     - [ ] Swim Speed
     - [ ] Fly Speed
     - [ ] Saving Throws
