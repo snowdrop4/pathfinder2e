@@ -64,7 +64,7 @@ impl PlayerBuilder {
         self
     }
 
-    pub fn level(mut self, level: i8) -> Self {
+    pub fn level(mut self, level: i64) -> Self {
         self.level = level;
         self
     }
