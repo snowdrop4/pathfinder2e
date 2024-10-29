@@ -1,4 +1,5 @@
 use core::panic;
+use std::cmp::min;
 
 use crate::{
     ancestry::Ancestry,
@@ -120,12 +121,17 @@ impl Player {
         )
     }
 
+    /// While wearing a suit of armor, you take the penalty listed in this
+    /// entry to your Speed, as well as to any other movement types you have,
+    /// such as a climb Speed or swim Speed, to a minimum Speed of 5 feet.
     fn get_speed(&self) -> i64 {
-        if self.armor_requirements_met() {
-            return self.ancestry.speed;
+        let speed = if self.armor_requirements_met() {
+            self.ancestry.speed
         } else {
-            return self.ancestry.speed - self.get_active_armor().speed_penalty;
-        }
+            self.ancestry.speed - self.get_active_armor().speed_penalty
+        };
+
+        min(5, speed)
     }
 
     fn get_active_weapon(&self) -> &Weapon {
