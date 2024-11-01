@@ -19,9 +19,9 @@
     - [x] Skills
     - [ ] AC
     - [x] Stride Speed
-    - [ ] Climb Speed
-    - [ ] Swim Speed
-    - [ ] Fly Speed
+    - [x] Climb Speed
+    - [x] Swim Speed
+    - [x] Fly Speed
     - [ ] Saving Throws
     - [ ] Languages
     - [ ] Bulk
@@ -41,7 +41,7 @@
         - [x] Traits
         - [x] Handedness
         - [x] On-hit Effects
-        - [x] Multiple attack Penalty
+        - [x] Multiple Attack Penalty
         - [ ] Weapon Specialisation Effects
     - [x] Armor:
         - [x] Name
