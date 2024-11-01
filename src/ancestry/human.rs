@@ -8,6 +8,9 @@ impl Ancestry {
             hp: 8,
             size: Size::Medium,
             stride_speed: 25,
+            climb_speed: None,
+            swim_speed: None,
+            fly_speed: None,
             attribute_boosts,
         };
     }

@@ -4,9 +4,9 @@
     - [x] HP
     - [x] Size
     - [x] Stride Speed
-    - [ ] Climb Speed
-    - [ ] Swim Speed
-    - [ ] Fly Speed
+    - [x] Climb Speed
+    - [x] Swim Speed
+    - [x] Fly Speed
     - [x] Attribute Boosts
 - [ ] Ancestries:
     - [x] Human
