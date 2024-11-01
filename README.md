@@ -54,3 +54,5 @@
         - [x] Speed Penalty
         - [x] Traits
         - [ ] Armor Specialisation Effects
+    - [ ] General Items:
+        - [ ] Registry system for modifiers? (E.g., so Battle Medic's Baton registers a modifier for the medicine skill, and then when doing a medicine check, all modifiers to that skill can be trivially looked up)
