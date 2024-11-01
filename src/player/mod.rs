@@ -1,5 +1,5 @@
 use core::panic;
-use std::cmp::min;
+use std::cmp::max;
 
 use crate::{
     ancestry::Ancestry,
@@ -131,7 +131,7 @@ impl Player {
             self.ancestry.stride_speed - self.get_active_armor().speed_penalty
         };
 
-        min(5, speed)
+        max(5, speed)
     }
 
     fn get_active_weapon(&self) -> &Weapon {
@@ -193,6 +193,7 @@ impl Player {
 
 #[cfg(test)]
 mod tests {
+    use crate::items::armors::skin;
     use crate::items::weapons;
 
     use super::*;
@@ -207,10 +208,18 @@ mod tests {
             .equipment(
                 Equipment::new()
                     .equipped_weapons(vec![weapons::dagger()])
+                    .equipped_armor(Some(skin()))
                     .build(),
             )
             .build()
             .unwrap()
+    }
+
+    #[test]
+    fn test_max_hp() {
+        let p = construct_player();
+
+        assert_eq!(p.get_max_hp(), 19);
     }
 
     #[test]
@@ -228,9 +237,9 @@ mod tests {
     }
 
     #[test]
-    fn test_max_hp() {
+    fn test_stride_speed() {
         let p = construct_player();
 
-        assert_eq!(p.get_max_hp(), 19);
+        assert_eq!(p.get_stride_speed(), 25);
     }
 }
