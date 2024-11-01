@@ -1,4 +1,5 @@
-use crate::{attribute::Attribute, size::Size};
+use crate::attribute::Attribute;
+use crate::size::Size;
 mod human;
 
 #[derive(Debug)]

@@ -1,14 +1,12 @@
 pub mod definitions;
 pub use definitions::*;
 
-use crate::{
-    attribute::Attribute,
-    attributes::Attributes,
-    currency::{cp, Currency},
-    damage_types::DamageType,
-    dice::{Dice, DiceAmount},
-    player::Player,
-};
+use crate::attribute::Attribute;
+use crate::attributes::Attributes;
+use crate::currency::{cp, Currency};
+use crate::damage_types::DamageType;
+use crate::dice::{Dice, DiceAmount};
+use crate::player::Player;
 
 #[derive(Debug)]
 #[allow(dead_code)]

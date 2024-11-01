@@ -1,6 +1,5 @@
-use crate::currency::cp;
-
 use super::Armor;
+use crate::currency::cp;
 
 pub fn skin() -> Armor {
     Armor::new("Skin")

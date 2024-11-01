@@ -1,4 +1,5 @@
-use crate::items::{armors::Armor, weapons::Weapon};
+use crate::items::armors::Armor;
+use crate::items::weapons::Weapon;
 
 #[derive(Debug)]
 pub struct Equipment {
@@ -65,9 +66,8 @@ impl EquipmentBuilder {
 
 #[cfg(test)]
 mod tests {
-    use crate::items::{armors, weapons};
-
     use super::Equipment;
+    use crate::items::{armors, weapons};
 
     #[test]
     fn test_construct_equipment() {

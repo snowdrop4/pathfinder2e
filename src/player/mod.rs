@@ -1,16 +1,15 @@
 use core::panic;
 use std::cmp::max;
 
-use crate::{
-    ancestry::Ancestry,
-    attribute::Attribute,
-    attributes::Attributes,
-    class::Class,
-    dice::Dice,
-    equipment::Equipment,
-    items::{armors::Armor, weapons::Weapon},
-    skills::Skills,
-};
+use crate::ancestry::Ancestry;
+use crate::attribute::Attribute;
+use crate::attributes::Attributes;
+use crate::class::Class;
+use crate::dice::Dice;
+use crate::equipment::Equipment;
+use crate::items::armors::Armor;
+use crate::items::weapons::Weapon;
+use crate::skills::Skills;
 
 #[derive(Debug)]
 #[allow(dead_code)]
@@ -193,10 +192,9 @@ impl Player {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
     use crate::items::armors::skin;
     use crate::items::weapons;
-
-    use super::*;
 
     fn construct_player() -> Player {
         Player::new()

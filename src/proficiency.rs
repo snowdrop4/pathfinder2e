@@ -4,5 +4,5 @@ pub enum Proficiency {
     TRAINED,
     EXPERT,
     MASTER,
-    LEGENDARY
+    LEGENDARY,
 }

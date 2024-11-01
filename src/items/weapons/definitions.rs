@@ -1,9 +1,7 @@
-use crate::{
-    currency::{cp, gp, sp},
-    damage_types::DamageType,
-    dice::{Dice, DiceAmount},
-    items::weapons::{Weapon, WeaponGroup, WeaponTrait, WeaponType},
-};
+use crate::currency::{cp, gp, sp};
+use crate::damage_types::DamageType;
+use crate::dice::{Dice, DiceAmount};
+use crate::items::weapons::{Weapon, WeaponGroup, WeaponTrait, WeaponType};
 
 pub fn fists() -> Weapon {
     Weapon::new("Unarmed Attack")

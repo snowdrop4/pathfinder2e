@@ -1,6 +1,6 @@
-use crate::{attribute::Attribute, size::Size};
-
 use super::Ancestry;
+use crate::attribute::Attribute;
+use crate::size::Size;
 
 impl Ancestry {
     pub fn new_human(attribute_boosts: (Attribute, Attribute)) -> Ancestry {
