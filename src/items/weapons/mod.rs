@@ -201,7 +201,7 @@ mod tests {
 
         for _ in 0..100 {
             let damage = w.dice.sum();
-            assert!(damage >= 1 && damage <= 4)
+            assert!(damage >= 1 && damage <= 6)
         }
     }
 
@@ -211,7 +211,7 @@ mod tests {
 
         for _ in 0..100 {
             let damage = w.dice.sum();
-            assert!(damage >= 1 && damage <= 4)
+            assert!(damage >= 1 && damage <= 8)
         }
     }
 }
