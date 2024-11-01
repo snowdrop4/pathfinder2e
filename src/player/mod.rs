@@ -133,6 +133,61 @@ impl Player {
         max(5, speed)
     }
 
+    /// https://2e.aonprd.com/Actions.aspx?ID=2374
+    /// You attempt an Athletics check to move a maximum distance of 5 feet up,
+    /// down, or across an incline. You're off-guard while climbing unless you
+    /// have a climb Speed. The GM determines the DC based on the nature of the
+    /// incline and environmental circumstances; you might get an automatic
+    /// critical success on an incline that's trivial to climb. If your land
+    /// Speed is 40 feet or higher, increase the maximum distance by 5 feet for
+    /// every 20 feet of Speed above 20 feet.
+    fn get_climb_speed(&self) -> i64 {
+        let mut climb_speed = self.ancestry.climb_speed.unwrap_or(5);
+        let stride_speed = self.get_stride_speed();
+
+        if stride_speed > 40 {
+            climb_speed += (stride_speed - 20) / 20;
+        }
+
+        if !self.armor_requirements_met() {
+            climb_speed -= self.get_active_armor().speed_penalty
+        }
+
+        max(5, climb_speed)
+    }
+
+    /// https://2e.aonprd.com/Actions.aspx?ID=2381
+    /// You attempt an Athletics check to move a maximum distance of 10 feet
+    /// through water. The GM determines the DC based on the turbulence or
+    /// danger of the water; in most instances of calm water, you get an
+    /// automatic critical success. If your land Speed is 40 feet or higher,
+    /// increase the maximum possible distance by 5 feet for every 20 feet of
+    /// Speed above 20 feet.
+    fn get_swim_speed(&self) -> i64 {
+        let mut swim_speed = self.ancestry.swim_speed.unwrap_or(10);
+        let stride_speed = self.get_stride_speed();
+
+        if stride_speed > 40 {
+            swim_speed += (stride_speed - 20) / 20;
+        }
+
+        if !self.armor_requirements_met() {
+            swim_speed -= self.get_active_armor().speed_penalty
+        }
+
+        max(5, swim_speed)
+    }
+
+    fn get_fly_speed(&self) -> i64 {
+        if let Some(fly_speed) = self.ancestry.fly_speed {
+            let fly_speed = fly_speed - self.get_active_armor().speed_penalty;
+
+            max(5, fly_speed)
+        } else {
+            0
+        }
+    }
+
     fn get_active_weapon(&self) -> &Weapon {
         // TODO: Better logic here, if there are multiple weapons.
         if self.equipment.equipped_weapons.len() != 0 {
@@ -239,5 +294,26 @@ mod tests {
         let p = construct_player();
 
         assert_eq!(p.get_stride_speed(), 25);
+    }
+
+    #[test]
+    fn test_climb_speed() {
+        let p = construct_player();
+
+        assert_eq!(p.get_climb_speed(), 5);
+    }
+
+    #[test]
+    fn test_swim_speed() {
+        let p = construct_player();
+
+        assert_eq!(p.get_swim_speed(), 10);
+    }
+
+    #[test]
+    fn test_fly_speed() {
+        let p = construct_player();
+
+        assert_eq!(p.get_fly_speed(), 0);
     }
 }
